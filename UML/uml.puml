@@ -1,0 +1,135 @@
+@startuml uml.puml
+classDiagram
+    class Room {
+        -roomId: String
+        -roomNumber: String
+        -roomType: RoomType
+        -status: RoomStatus
+        -capacity: Int
+        -beds: List~Bed~
+        -amenities: List~Amenity~
+        -equipment: List~Equipment~
+        -floor: Int
+        -lastMaintenanceDate: Date
+        -nextMaintenanceDate: Date
+        +addBed(bed: Bed) void
+        +removeBed(bedId: String) void
+        +addAmenity(amenity: Amenity) void
+        +addEquipment(equipment: Equipment) void
+        +updateStatus(newStatus: RoomStatus) void
+        +getAvailableBeds() List~Bed~
+        +getOccupancyRate() Float
+    }
+
+    class Bed {
+        -bedId: String
+        -bedNumber: Int
+        -status: BedStatus
+        -bedType: BedType
+        -patient: Patient
+        -assignedDate: Date
+        -dischargeDate: Date
+        +assignPatient(patient: Patient) void
+        +releasePatient() void
+        +updateStatus(newStatus: BedStatus) void
+    }
+
+    class Patient {
+        -patientId: String
+        -firstName: String
+        -lastName: String
+        -dateOfBirth: Date
+        -medicalRecordNumber: String
+        -contactNumber: String
+        -admissionDate: Date
+        -dischargeDate: Date
+        +getFullName() String
+        +getAge() Int
+    }
+
+    class Amenity {
+        -amenityId: String
+        -name: String
+        -description: String
+        -status: AmenityStatus
+        +updateStatus(newStatus: AmenityStatus) void
+    }
+
+    class Equipment {
+        -equipmentId: String
+        -name: String
+        -type: String
+        -serialNumber: String
+        -status: EquipmentStatus
+        -lastServiceDate: Date
+        -nextServiceDate: Date
+        +reportMaintenance() void
+        +updateStatus(newStatus: EquipmentStatus) void
+    }
+
+    class RoomType {
+        <<enumeration>>
+        GENERAL_WARD
+        PRIVATE_ROOM
+        ICU
+        PEDIATRIC
+        MATERNITY
+        ISOLATION
+        EMERGENCY
+    }
+
+    class RoomStatus {
+        <<enumeration>>
+        AVAILABLE
+        OCCUPIED
+        UNDER_MAINTENANCE
+        RESERVED
+        CLOSED
+    }
+
+    class BedType {
+        <<enumeration>>
+        STANDARD
+        PREMIUM
+        ICU_BED
+        PEDIATRIC_BED
+        STRETCHER
+    }
+
+    class BedStatus {
+        <<enumeration>>
+        AVAILABLE
+        OCCUPIED
+        MAINTENANCE
+        RESERVED
+        OUT_OF_SERVICE
+    }
+
+    class AmenityStatus {
+        <<enumeration>>
+        FUNCTIONAL
+        DAMAGED
+        UNDER_REPAIR
+        NEEDS_SERVICE
+    }
+
+    class EquipmentStatus {
+        <<enumeration>>
+        OPERATIONAL
+        IN_MAINTENANCE
+        NEEDS_CALIBRATION
+        OUT_OF_SERVICE
+    }
+
+    Room "1" --> "*" Bed
+    Room "1" --> "*" Amenity
+    Room "1" --> "*" Equipment
+    Bed "1" --> "0..1" Patient
+    Room "1" --> "1" RoomType
+    Room "1" --> "1" RoomStatus
+    Bed "1" --> "1" BedType
+    Bed "1" --> "1" BedStatus
+    Amenity "1" --> "1" AmenityStatus
+    Equipment "1" --> "1" EquipmentStatus
+
+@enduml
