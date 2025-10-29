@@ -1,0 +1,6 @@
+enum EquipmentStatus {
+  OPERATIONAL,
+  IN_MAINTENANCE,
+  NEEDS_CALIBRATION,
+  OUT_OF_SERVICE
+}

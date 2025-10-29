@@ -1,0 +1,155 @@
+classDiagram
+    direction TB
+
+    %% Abstract Classes
+    class Person {
+        <<abstract>>
+        +String name
+        +String dateOfBirth
+        +String address
+        +String tel
+    }
+
+    class Staff {
+        <<abstract>>
+        +String staffID
+        +DateTime hireDate
+        +double salary
+        +Map~String, List~DateTime~~ schedule
+    }
+
+    %% Enumerations
+    class RoomType {
+        <<enumeration>>
+        GENERAL_WARD
+        PRIVATE_ROOM
+        ICU
+        PEDIATRIC
+        MATERNITY
+        ISOLATION
+        EMERGENCY
+    }
+
+    class BedType {
+        <<enumeration>>
+        STANDARD
+        PREMIUM
+        ICU_BED
+        PEDIATRIC_BED
+        STRETCHER
+    }
+
+    class RoomStatus {
+        <<enumeration>>
+        AVAILABLE
+        OCCUPIED
+        UNDER_MAINTENANCE
+        RESERVED
+        CLOSED
+    }
+
+    class EquipmentStatus {
+        <<enumeration>>
+        OPERATIONAL
+        IN_MAINTENANCE
+        NEEDS_CALIBRATION
+        OUT_OF_SERVICE
+    }
+
+    %% Concrete Classes
+    class Administrative {
+        +String responsibility
+    }
+
+    class Patient {
+        +String patientID
+        +String bloodType
+        +List~String~ medicalRecords
+        +List~String~ allergies
+        +String emergencyContact
+    }
+
+    class Nurse {
+        +List~Room~ assignedRoom
+        +List~Patient~ assignedPatient
+    }
+
+    class Doctor {
+        +String specialization
+        +List~String~ certifications
+        +List~Patient~ currentPatients
+    }
+
+    class Prescription {
+        +String ID
+        +DateTime time
+        +List~Medication~ medications
+        +String instructions
+        +Doctor prescribedBy
+        +Patient prescribedTo
+    }
+
+    class Medication {
+        +String ID
+        +String name
+        +String dosage
+        +String manufacturer
+        +List~String~ sideEffects
+    }
+
+    class Bed {
+        +String bedNumber
+        +BedType bedType
+        +bool isOccupied
+        +Patient patientId
+        +List~String~ features
+        +method1(Type) Type
+        +method2(Type, Type) Type
+    }
+
+    class Room {
+        +String roomId
+        +String number
+        +RoomType roomType
+        +RoomStatus status
+        +List~Equipment~ equipment
+        +List~Bed~ bed
+    }
+
+    class Equipment {
+        +String equipmentId
+        +String name
+        +String type
+        +String serialNumber
+        +EquipmentStatus status
+        +Date lastServiceDate
+        +Date nextServiceDate
+        +reportMaintenance() void
+        +updateStatus(EquipmentStatus) void
+    }
+
+    %% Inheritance Relationships
+    Person <|-- Staff
+    Person <|-- Patient
+    Staff <|-- Administrative
+    Staff <|-- Nurse
+    Staff <|-- Doctor
+
+    %% Composition/Aggregation Relationships
+    Room "1" *-- "1..*" Bed : contains
+    Room "1" *-- "0..*" Equipment : contains
+    Nurse "1" *-- "0..*" Room : assignedRoom
+    Nurse "1" *-- "0..*" Patient : assignedPatient
+    Doctor "1" *-- "0..*" Patient : currentPatients
+
+    %% Association Relationships
+    Prescription --> Doctor : prescribedBy
+    Prescription --> Patient : prescribedTo
+    Prescription "1" *-- "1..*" Medication : medications
+    Bed --> Patient : patientId
+
+    %% Enumeration Usage
+    Room --> RoomType : roomType
+    Room --> RoomStatus : status
+    Bed --> BedType : bedType
+    Equipment --> EquipmentStatus : status

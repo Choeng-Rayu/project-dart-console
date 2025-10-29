@@ -1,0 +1,1 @@
+enum AppointmentStatus { SCHEDULE, IN_PROGRESS, COMPLETED, CANCELLED, NO_SHOW }

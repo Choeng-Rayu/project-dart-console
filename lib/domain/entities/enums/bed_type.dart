@@ -1,0 +1,7 @@
+enum BedType {
+  STANDARD,
+  PREMIUM,
+  ICU_BED,
+  PEDIATRIC_BED,
+  STRETCHER
+}
