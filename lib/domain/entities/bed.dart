@@ -1,33 +1,65 @@
+import 'dart:collection';
 import 'enums/bed_type.dart';
 import 'patient.dart';
 
 class Bed {
-  final String bedNumber;
-  final BedType bedType;
-  bool isOccupied;
-  Patient? patientId; // Nullable since bed might be empty
-  final List<String> features;
+  final String _bedNumber;
+  final BedType _bedType;
+  bool _isOccupied;
+  Patient? _currentPatient; // Nullable since bed might be empty
+  final List<String> _features;
+
+  // Getters
+  String get bedNumber => _bedNumber;
+  BedType get bedType => _bedType;
+  bool get isOccupied => _isOccupied;
+  Patient? get currentPatient => _currentPatient;
+  UnmodifiableListView<String> get features => UnmodifiableListView(_features);
+  bool get isAvailable => !_isOccupied;
 
   Bed({
-    required this.bedNumber,
-    required this.bedType,
-    this.isOccupied = false,
-    this.patientId,
-    required this.features,
-  });
+    required String bedNumber,
+    required BedType bedType,
+    bool isOccupied = false,
+    Patient? patient,
+    required List<String> features,
+  })  : _bedNumber = bedNumber,
+        _bedType = bedType,
+        _isOccupied = isOccupied,
+        _currentPatient = patient,
+        _features = List.from(features) {
+    _validateBed();
+  }
+
+  void _validateBed() {
+    if (_bedNumber.trim().isEmpty) {
+      throw ArgumentError('Bed number cannot be empty');
+    }
+  }
 
   // Assign patient to bed
   void assignPatient(Patient patient) {
-    patientId = patient;
-    isOccupied = true;
+    _currentPatient = patient;
+    _isOccupied = true;
   }
 
   // Remove patient from bed
   void removePatient() {
-    patientId = null;
-    isOccupied = false;
+    _currentPatient = null;
+    _isOccupied = false;
   }
 
-  // Check if bed is available
-  bool get isAvailable => !isOccupied;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Bed &&
+          runtimeType == other.runtimeType &&
+          _bedNumber == other._bedNumber;
+
+  @override
+  int get hashCode => _bedNumber.hashCode;
+
+  @override
+  String toString() =>
+      'Bed(number: $_bedNumber, type: $_bedType, occupied: $_isOccupied)';
 }
