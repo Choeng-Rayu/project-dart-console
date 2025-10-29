@@ -35,7 +35,7 @@ class Prescription {
   }
 
   // Get all medication names as a list
-  List<String> get medicationNames => 
+  List<String> get medicationNames =>
       medications.map((med) => med.name).toList();
 
   // Get full prescription details
@@ -49,10 +49,9 @@ class Prescription {
       };
 
   // Check if prescription is recent (within last 30 days)
-  bool get isRecent => 
-      DateTime.now().difference(time).inDays <= 30;
+  bool get isRecent => DateTime.now().difference(time).inDays <= 30;
 
   // Get formatted prescription date
-  String get formattedDate => 
+  String get formattedDate =>
       '${time.year}-${time.month.toString().padLeft(2, '0')}-${time.day.toString().padLeft(2, '0')}';
 }
